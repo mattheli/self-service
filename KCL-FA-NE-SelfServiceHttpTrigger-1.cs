@@ -19,14 +19,16 @@ namespace KCLWave.SelfServiceHTTPTrigger
         {
             log.LogInformation("C# HTTP trigger function processed a request.");
 
-            string name = req.Query["name"];
+            string listItemId = req.Query["listItemId"];
 
             string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
             dynamic data = JsonConvert.DeserializeObject(requestBody);
-            name = name ?? data?.name;
+            listItemId = listItemId ?? data?.listItemId;
 
-            return name != null
-                ? (ActionResult)new OkObjectResult($"Sup, {name}")
+            log.LogInformation($"New SharePoint List Item ID, {listItemId}");
+
+            return listItemId != null
+                ? (ActionResult)new OkObjectResult($"New SharePoint List Item ID , {listItemId}")
                 : new BadRequestObjectResult("Please pass a name on the query string or in the request body");
         }
     }
